@@ -1,5 +1,5 @@
 // バックエンドAPIのURL
-const API_BASE_URL = 'https://backend-five-rust-98.vercel.app';
+const API_BASE_URL = 'https://backend-nine-silk-38.vercel.app';
 
 // 拡張機能アイコンクリックでサイドパネルを開く
 chrome.action.onClicked.addListener(async (tab) => {
