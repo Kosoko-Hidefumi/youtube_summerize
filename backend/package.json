@@ -1,0 +1,19 @@
+{
+  "name": "youtube-summarizer-backend",
+  "version": "1.0.0",
+  "description": "YouTube動画要約バックエンドAPI",
+  "main": "api/summarize.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.6.1",
+    "youtube-captions-scraper": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アイコン生成ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #1a1a2e;
+      color: white;
+    }
+    .icons {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .icon-box {
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+    .instructions {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Chrome拡張機能アイコン生成</h1>
+  
+  <div class="instructions">
+    <p>各アイコンの「ダウンロード」ボタンをクリックして、PNGファイルを保存してください。</p>
+    <p>保存後、このフォルダ（extension/icons/）に配置します。</p>
+  </div>
+
+  <div class="icons">
+    <div class="icon-box">
+      <h3>16x16</h3>
+      <canvas id="icon16" width="16" height="16"></canvas>
+      <br>
+      <button onclick="download('icon16', 16)">ダウンロード</button>
+    </div>
+    <div class="icon-box">
+      <h3>48x48</h3>
+      <canvas id="icon48" width="48" height="48"></canvas>
+      <br>
+      <button onclick="download('icon48', 48)">ダウンロード</button>
+    </div>
+    <div class="icon-box">
+      <h3>128x128</h3>
+      <canvas id="icon128" width="128" height="128"></canvas>
+      <br>
+      <button onclick="download('icon128', 128)">ダウンロード</button>
+    </div>
+  </div>
+
+  <script>
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      const scale = size / 128;
+      
+      // グラデーション背景
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#ff6b6b');
+      gradient.addColorStop(0.5, '#feca57');
+      gradient.addColorStop(1, '#48dbfb');
+      
+      // 角丸四角形
+      const radius = 24 * scale;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radius);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      
+      // 再生ボタン（三角形）
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      const cx = size * 0.42;
+      const cy = size * 0.5;
+      const triSize = size * 0.4;
+      ctx.moveTo(cx - triSize * 0.3, cy - triSize * 0.4);
+      ctx.lineTo(cx - triSize * 0.3, cy + triSize * 0.4);
+      ctx.lineTo(cx + triSize * 0.4, cy);
+      ctx.closePath();
+      ctx.fill();
+      
+      // 要約を示す線
+      if (size >= 48) {
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        const lineX = size * 0.65;
+        const lineY = size * 0.6;
+        const lineW = size * 0.25;
+        const lineH = size * 0.045;
+        const gap = size * 0.09;
+        
+        for (let i = 0; i < 3; i++) {
+          const w = lineW - (i * size * 0.03);
+          ctx.globalAlpha = 1 - (i * 0.2);
+          ctx.beginPath();
+          ctx.roundRect(lineX, lineY + (i * gap), w, lineH, lineH / 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function download(id, size) {
+      const canvas = document.getElementById(id);
+      const link = document.createElement('a');
+      link.download = `icon${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // 初期化
+    [16, 48, 128].forEach(size => {
+      const canvas = document.getElementById(`icon${size}`);
+      drawIcon(canvas, size);
+    });
+  </script>
+</body>
+</html>
+
+

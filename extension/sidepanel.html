@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube動画要約</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>📺 YouTube要約</h1>
+    </header>
+
+    <div class="video-info" id="videoInfo">
+      <div class="video-status" id="videoStatus">
+        <span class="status-icon">🔍</span>
+        <span id="statusText">動画を検出中...</span>
+      </div>
+      <div class="video-id" id="videoIdDisplay"></div>
+    </div>
+
+    <div class="controls">
+      <div class="length-selector">
+        <label>要約の長さ:</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="summaryLength" value="short">
+            <span>短い</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="summaryLength" value="medium" checked>
+            <span>普通</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="summaryLength" value="long">
+            <span>詳細</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="summarize-btn" id="summarizeBtn" disabled>
+        <span class="btn-icon">✨</span>
+        <span class="btn-text">要約を生成</span>
+      </button>
+    </div>
+
+    <div class="result-section" id="resultSection">
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <span>要約を生成中...</span>
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+
+      <div class="summary-result" id="summaryResult">
+        <div class="summary-content">
+          <h3>📝 要約</h3>
+          <ul class="summary-list" id="summaryList"></ul>
+        </div>
+        
+        <div class="key-points">
+          <h3>⭐ 重要ポイント</h3>
+          <ol class="points-list" id="keyPointsList"></ol>
+        </div>
+
+        <div class="metadata" id="metadata"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
+
+

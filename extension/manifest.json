@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube動画要約",
+  "version": "1.0.0",
+  "description": "ワンクリックでYouTube動画を要約してサイドパネルに表示",
+  "permissions": [
+    "activeTab",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "https://youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "YouTube動画を要約"
+  }
+}
+
