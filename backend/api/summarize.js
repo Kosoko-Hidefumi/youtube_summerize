@@ -12,22 +12,42 @@ function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 }
 
-// YouTube動画情報を取得
+// YouTube動画情報を取得（oEmbed API使用）
 async function getVideoInfo(videoId) {
-  const url = `https://www.youtube.com/watch?v=${videoId}`;
-  
   try {
-    const response = await fetch(url);
-    const html = await response.text();
+    // oEmbed APIでタイトルを取得（より信頼性が高い）
+    const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+    const oembedResponse = await fetch(oembedUrl);
     
-    // タイトルを抽出
-    const titleMatch = html.match(/<title>(.+?) - YouTube<\/title>/);
-    const title = titleMatch ? titleMatch[1] : '';
+    if (!oembedResponse.ok) {
+      console.error('oEmbed API エラー:', oembedResponse.status);
+      return { title: '', description: '' };
+    }
     
-    // 説明文を抽出（メタタグから）
-    const descMatch = html.match(/<meta name="description" content="([^"]*)">/);
-    const description = descMatch ? descMatch[1] : '';
+    const oembedData = await oembedResponse.json();
+    const title = oembedData.title || '';
+    const author = oembedData.author_name || '';
     
+    // noembed APIで追加情報を取得
+    const noembedUrl = `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`;
+    let description = '';
+    
+    try {
+      const noembedResponse = await fetch(noembedUrl);
+      if (noembedResponse.ok) {
+        const noembedData = await noembedResponse.json();
+        description = noembedData.description || '';
+      }
+    } catch (e) {
+      // noembedが失敗しても続行
+    }
+    
+    // 説明文がない場合、著者名を追加
+    if (!description && author) {
+      description = `チャンネル: ${author}`;
+    }
+    
+    console.log(`動画情報取得: タイトル="${title}", 説明="${description.substring(0, 50)}..."`);
     return { title, description };
   } catch (error) {
     console.error('動画情報の取得に失敗:', error);
